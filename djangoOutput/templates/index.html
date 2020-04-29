@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STORY SPINNER</title>
+    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <script src="{% static 'javascript/particles.js' %}"></script>
+    <script src="{% static 'javascript/app.js' %}"></script>
+    <h1 class="StorySpinner indexanimation"><u>Story Spinner</u></h1>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <h2 style="color:white;">the text       c  h  o  n  k       nobody wrote</h2>
+    <h3 style="color:white;">Give it a seed text, or let it make its own  c  h  o  n  k  </h3>
+    <main>
+        <div class="container">
+        </div>
+        <section class="cards">
+            <div class="card shadow-pop-tr">
+                <div class="card__image-container">
+                    <img src="https://thenypost.files.wordpress.com/2020/04/donald-trump-who-1.jpg?quality=80&strip=all&w=618&h=410&crop=1"/>
+                </div>
+                <div class="card__content">
+                    <p class="card__title text--medium">
+                        Donald Trump Campaign Speech 
+                    </p>
+                    <div class card="card__info">
+                      <form action="/external/" method="post">
+			{% csrf_token %}
+                        <input type="text" name="inputtext">
+
+			<input type="submit" name="Don_Button" value="Generate" id="submit" onclick="myFun3()" type="submit" class="button" value="Generate">
+		      </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-pop-tr">
+                <div class="card__image-container">
+                    <img src="https://images.pexels.com/photos/675960/mic-music-sound-singer-675960.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"/>
+                </div>
+                <div class="card__content">
+                    <p class="card__title text--medium">
+                        Obscure Pop Music
+                    </p>
+                    <div class card="card__info">
+                        <form action="/external/" method="post">
+                          {% csrf_token %}
+			   <input type="text" name="inputtext">
+                            <input type="submit" name="Pop_Button" value="Generate" id="submit" onclick="myFun3()" type="submit" class="button" value="Generate">
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-pop-tr">
+                <div class="card__image-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Yelp_Logo.svg/150px-Yelp_Logo.svg.png"/>
+                </div>
+                <div class="card__content">
+                    <p class="card__title text--medium">
+                        Yelp Review
+                    </p>
+                    <div class card="card__info">
+                        <form action="/external/" method="post">
+                          {% csrf_token %}
+			   <input type="text" name="inputtext">
+                            <input type="submit" name="Yelp_Button" value="Generate" id="submit" onclick="myFun3()" type="submit" class="button" value="Generate">
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-pop-tr">
+                <div class="card__image-container">
+                    <img src="https://images2.minutemediacdn.com/image/upload/c_fill,g_auto,h_1248,w_2220/f_auto,q_auto,w_1100/v1554932380/shape/mentalfloss/530712-wikimedia_commons.jpg"/>
+                </div>
+                <div class="card__content">
+                    <p class="card__title text--medium">
+                        Crime and Punishment
+                    </p>
+                    <div class card="card__info">
+                        <form action="/external/" method="post">
+                          {% csrf_token %}
+			   <input type="text" name="inputtext">
+                            <input type="submit" name="Raskolnikov_Button" value="Generate" id="submit" onclick="myFun3()" type="submit" class="button" value="Generate">
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-pop-tr">
+                <div class="card__image-container">
+                    <img src="https://www.edvardmunch.org/images/paintings/the-scream.jpg"/>
+                </div>
+                <div class="card__content">
+                    <p class="card__title text--medium">
+                        Scary Story to Tell In The Dark
+                    </p>
+                    <div class card="card__info">
+                        <form action="/external/" method="post">
+                          {% csrf_token %}
+			   <input type="text" name="inputtext">
+                            <input type="submit" name="Scary_Button" value="Generate" id="submit" onclick="myFun3()" type="submit" class="button" value="Generate">
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-pop-tr">
+                <div class="card__image-container">
+                    <img src="https://miro.medium.com/max/2400/1*9B7S9mipwLURUX9wdZN7Pw.jpeg"/>
+                </div>
+                <div class="card__content">
+                    <p class="card__title text--medium">
+                        Pandemic-Themed News
+                    </p>
+                    <div class card="card__info">
+                        <form action="/external/" method="post">
+                          {% csrf_token %}
+			   <input type="text" name="inputtext">
+                            <input type="submit" name="News_Button" value="Generate" id="submit" onclick="myFun3()" type="submit" class="button" value="Generate">
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-pop-tr">
+                <div class="card__image-container">
+                    <img src="https://vignette.wikia.nocookie.net/villains/images/7/72/Lovecraft-cthulhu.jpg/revision/latest/scale-to-width-down/310?cb=20151128095138"/>
+                </div>
+                <div class="card__content">
+                    <p class="card__title text--medium">
+                        H.P. Lovecraft
+                    </p>
+                    <div class card="card__info">
+                        <form action="/external/" method="post">
+                          {% csrf_token %}
+			   <input type="text" name="inputtext">
+                            <input type="submit" name="Lovecraft_Button" value="Generate" id="submit" onclick="myFun3()" type="submit" class="button" value="Generate">
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-pop-tr">
+                <div class="card__image-container">
+                    <img src="https://cfcdnpull-creativefreedoml.netdna-ssl.com/wp-content/uploads/2017/06/Twitter-logo-2012.png"/>
+                </div>
+                <div class="card__content">
+                    <p class="card__title text--medium">
+                        Tweet From Russian Troll Farm
+                    </p>
+                    <div class card="card__info">
+                        <form action="/external/" method="post">
+                          {% csrf_token %}
+			   <input type="text" name="inputtext">
+                            <input type="submit" name="Troll_Button" value="Generate" id="submit" onclick="myFun3()" type="submit" class="button" value="Generate">
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-pop-tr">
+                <div class="card__image-container">
+                    <img src="https://thumbs-prod.si-cdn.com/Fnu8jvrwgJ85TIGzHbfZdXW1ai8=/800x600/filters:no_upscale()/https://public-media.si-cdn.com/filer/c6/e8/c6e8ff0f-6428-4199-8640-96e8cf04023f/death_of_caesar.png"/>
+                </div>
+                <div class="card__content">
+                    <p class="card__title text--medium">
+                        Shakespeare's Julius Caesar
+                    </p>
+                    <div class card="card__info">
+                        <form action="/external/" method="post">
+                          {% csrf_token %}
+			   <input type="text" name="inputtext">
+                            <input type="submit" name="Caesar_Button" value="Generate" id="submit" onclick="myFun3()" type="submit" class="button" value="Generate">
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        </main>
+</main>
+  <section class="sidebox" style="width: 70%;height: 20%; background-color:  rgb(0, 0, 0); color: rgb(255,255,255); font-size:3rem; margin:0 auto; text-align:center;">
+      <div class="textshowDiv">
+	<p class="fade-in">{{data1}}</p>
+	<span id="textshow"> </span>
+      </div>
+    </section>
+</body>
+
+</html>
+
+

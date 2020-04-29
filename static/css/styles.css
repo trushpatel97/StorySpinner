@@ -1,0 +1,289 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+.StorySpinner{
+    text-underline-position: under;
+    margin-top: 10px;
+    font-size: 100px;
+    text-align: center;
+    color: aliceblue;
+    font-family: 'Dancing Script', cursive;
+    padding-left: 200px;
+    padding-top: 10px;
+    padding-bottom: 0px;
+}
+.indexanimation {
+    animation: type 1s steps(19); /* Types animation in 5 sec with all 38 characters*/
+    overflow: hidden; /* Overflow specifies content in area, hidden makes content invisible*/
+    white-space: nowrap; /* Text continues on single line*/
+    font-weight: 300;
+    color: white;
+    width: 18ch;/* Tells you 38 character will fit on line*/
+
+}
+
+@keyframes type {
+    0% {
+        width: 0ch;
+    }
+}
+html,body{
+    background-color: #000000;
+    text-align:center;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+main {
+    vertical-align:top;
+    display:inline-block;
+    grid-template-columns: repeat(12,minmax(auto,80px)) 3fr;
+    width:40%;
+    grid-gap:0px;
+    margin:auto;
+    padding: 100px 0;
+}
+.text--medium{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 400;
+    color: #ecf0f1;
+}
+.cards{
+    grid-column: 2/span 8;
+    display: grid;
+    grid-template-columns:repeat(12,minmax(auto,80px));
+    grid-gap: 30px;
+    margin-right: 80px;
+}
+.sidebox {
+    margin-top: 100px;
+    background-color:white;
+    text-align:left;
+    height:74vh;
+    border-radius:5px;
+    position:relative;
+}
+.textshowDiv {
+    position:absolute;
+    top:0;
+    vertical-align:top;
+}
+.card,.container {
+    grid-column-end: span 4;
+    display: flex;
+    flex-direction: column;
+    background-color: #1a1a1b;
+    opacity: 100;
+    transition: all 0.3s ease 0s;
+}
+.card:hover{
+    transform: translateY(-7px);
+}
+.card__image-container{
+    width: 100%;
+    padding-top: 56.25%;
+    overflow: hidden;
+    position: relative;
+}
+.card__image-container img{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+.card__content{
+    padding:20px;
+}
+.card__title{
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 35px;
+}
+.card__info{
+    display: flex;
+    align-self: end;
+    align-items: center;
+}
+.card__price{
+    margin-left: auto;
+    text-align: center;
+    padding: 5px 10px;
+    background-color: #333230a9;
+    border-radius: 10px;
+}
+.text__container{
+    width: 500px;
+    height: 400px;
+    margin: 100px auto;
+    background: #fff;
+    position:relative;
+}
+.container h1{
+    margin:0;
+    padding: 0;
+    font-family: arial;
+    font-size: 3em;
+    text-transform: uppercase;
+    text-align: center;
+    position: relative;
+    top:50%;
+    color:#555;
+}
+button {
+    margin:0 auto;
+    display:block;
+    cursor:pointer;
+}
+.p2{
+    font-family: 'Dancing Script', cursive;
+    font-size: 30px;
+}
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+#msg {
+    color:red;
+    font-weight:bold;
+}
+#submit {
+    margin-left: auto;
+    text-align: center;
+    padding: 5px 10px;
+    width: 135px;
+    height: 30px;
+    background-color: #333230a9;
+    color: #fff;
+    font-size: 15px;
+    text-align: center;
+    border-radius: 10px;
+   }
+@media only screen and (max-width: 1000px){
+    .card{
+        grid-column-end: span 6;
+   }
+}
+@media only screen and (max-width: 700px){
+    main{
+        grid-gap:20px;
+   }
+    .card{
+        grid-column-end: span 12;
+   }
+}
+@media only screen and (max-width: 500px){
+    main{
+        grid-template-columns: 10px repeat(6,1fr) 10px;
+        grid-gap:10px;
+   }
+    .cards{
+        grid-column: 2 / span 6;
+        grid-template-columns: repeat(6,1fr);
+        grid-gap: 20px;
+        width:40%;
+   }
+    .card{
+        grid-column-end: span 6;
+        display: inline-block;
+   }
+}
+.fade-in {
+    animation: fadeIn ease 10s;
+    -webkit-animation: fadeIn ease 10s;
+    -moz-animation: fadeIn ease 10s;
+    -o-animation: fadeIn ease 10s;
+    -ms-animation: fadeIn ease 10s;
+}
+@keyframes fadeIn {
+    0% {
+        opacity:0;
+   }
+    100% {
+        opacity:1;
+   }
+}
+@-moz-keyframes fadeIn {
+    0% {
+        opacity:0;
+   }
+    100% {
+        opacity:1;
+   }
+}
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity:0;
+   }
+    100% {
+        opacity:1;
+   }
+}
+@-o-keyframes fadeIn {
+    0% {
+        opacity:0;
+   }
+    100% {
+        opacity:1;
+   }
+}
+@-ms-keyframes fadeIn {
+    0% {
+        opacity:0;
+   }
+    100% {
+        opacity:1;
+   }
+}
+.shadow-pop-tr {
+	-webkit-animation: shadow-pop-tr 0.3s cubic-bezier(0.470, 0.000, 0.745, 0.715) both;
+	        animation: shadow-pop-tr 0.3s cubic-bezier(0.470, 0.000, 0.745, 0.715) both;
+}
+/* ----------------------------------------------
+ * Generated by Animista on 2020-4-16 21:2:8
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+
+/**
+ * ----------------------------------------
+ * animation shadow-pop-tr
+ * ----------------------------------------
+ */
+ @-webkit-keyframes shadow-pop-tr {
+    0% {
+      -webkit-box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+              box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+      -webkit-transform: translateX(0) translateY(0);
+              transform: translateX(0) translateY(0);
+    }
+    100% {
+      -webkit-box-shadow: 1px -1px #3e3e3e, 2px -2px #3e3e3e, 3px -3px #3e3e3e, 4px -4px #3e3e3e, 5px -5px #3e3e3e, 6px -6px #3e3e3e, 7px -7px #3e3e3e, 8px -8px #3e3e3e;
+              box-shadow: 1px -1px #3e3e3e, 2px -2px #3e3e3e, 3px -3px #3e3e3e, 4px -4px #3e3e3e, 5px -5px #3e3e3e, 6px -6px #3e3e3e, 7px -7px #3e3e3e, 8px -8px #3e3e3e;
+      -webkit-transform: translateX(-8px) translateY(8px);
+              transform: translateX(-8px) translateY(8px);
+    }
+  }
+  @keyframes shadow-pop-tr {
+    0% {
+      -webkit-box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+              box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+      -webkit-transform: translateX(0) translateY(0);
+              transform: translateX(0) translateY(0);
+    }
+    100% {
+      -webkit-box-shadow: 1px -1px #3e3e3e, 2px -2px #3e3e3e, 3px -3px #3e3e3e, 4px -4px #3e3e3e, 5px -5px #3e3e3e, 6px -6px #3e3e3e, 7px -7px #3e3e3e, 8px -8px #3e3e3e;
+              box-shadow: 1px -1px #3e3e3e, 2px -2px #3e3e3e, 3px -3px #3e3e3e, 4px -4px #3e3e3e, 5px -5px #3e3e3e, 6px -6px #3e3e3e, 7px -7px #3e3e3e, 8px -8px #3e3e3e;
+      -webkit-transform: translateX(-8px) translateY(8px);
+              transform: translateX(-8px) translateY(8px);
+    }
+  }
+  
