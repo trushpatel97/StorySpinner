@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 import requests
 from subprocess import run,PIPE
 from djangoOutput.load_word_model import gen_don, load_doc, save_doc, generate_seq
@@ -13,6 +14,10 @@ from djangoOutput.load_caesar_model import gen_caesar, load_doc, save_doc, gener
 
 import sys
 import os
+
+def health_check(request):
+    """Simple health check endpoint for Railway deployment"""
+    return HttpResponse("OK", status=200)
 
 def button(request):
     print("RUNNING BUTTON")

@@ -21,6 +21,7 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('health/', views.health_check, name='health_check'),
     path('', views.button, name='home'),
     path('external/', views.external, name="script"),
 ] + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
