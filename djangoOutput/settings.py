@@ -32,6 +32,14 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() == 'true'
 # Temporarily allow all hosts for Railway deployment troubleshooting
 ALLOWED_HOSTS = ['*']
 
+# CSRF trusted origins for Railway deployment
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-2ffd.up.railway.app',
+    'https://*.railway.app',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
