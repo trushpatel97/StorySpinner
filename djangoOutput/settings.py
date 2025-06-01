@@ -29,33 +29,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'heu3*j$$s0+cg36jh+7e^spcvd$p4r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() == 'true'
 
-# Handle ALLOWED_HOSTS for Railway deployment
-RAILWAY_STATIC_URL = os.environ.get('RAILWAY_STATIC_URL')
-ALLOWED_HOSTS = []
-
-if RAILWAY_STATIC_URL:
-    # Extract domain from Railway URL
-    ALLOWED_HOSTS.append(RAILWAY_STATIC_URL.replace('https://', '').replace('http://', ''))
-
-# Add Railway app domains
-ALLOWED_HOSTS.extend([
-    '*.railway.app',
-    'localhost',
-    '127.0.0.1',
-    '0.0.0.0'
-])
-
-# Allow all hosts in debug mode or if explicitly set
-if DEBUG or os.environ.get('DJANGO_ALLOWED_HOSTS'):
-    additional_hosts = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')
-    ALLOWED_HOSTS.extend([host.strip() for host in additional_hosts if host.strip()])
-
-# Remove empty strings and duplicates
-ALLOWED_HOSTS = list(set([host for host in ALLOWED_HOSTS if host]))
-
-# If still empty, allow all (not recommended for production)
-if not ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ['*']
+# Temporarily allow all hosts for Railway deployment troubleshooting
+ALLOWED_HOSTS = ['*']
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
