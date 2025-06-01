@@ -6,18 +6,28 @@ from pickle import dump
 from random import randint
 from pickle import load
 from numpy import array
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.layers import Dropout
-from keras.layers import LSTM
-from keras.layers import Embedding
-from keras.layers import BatchNormalization
-from keras.models import load_model
-from keras.callbacks import ModelCheckpoint
-from keras.utils import np_utils
-from keras.utils import to_categorical
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
+import re  # Add this for grammar fixes
+
+# Updated imports for modern TensorFlow/Keras
+import tensorflow as tf
+from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.layers import Dense, Dropout, LSTM, Embedding, BatchNormalization
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # sample program to load in a dataset (Trump_2016-11-06.txt)
@@ -36,6 +46,58 @@ It just takes 20 hours to train on it. But that's Russian Lit for you.
 '''
 
 
+
+def sample_with_temperature(predictions, temperature=0.8):
+    """Sample from probability distribution with temperature"""
+    predictions = numpy.array(predictions).astype('float64')
+    predictions = numpy.log(predictions + 1e-7) / temperature
+    exp_preds = numpy.exp(predictions)
+    predictions = exp_preds / numpy.sum(exp_preds)
+    probas = numpy.random.multinomial(1, predictions, 1)
+    return numpy.argmax(probas)
+
+def fix_basic_grammar(text):
+    """Apply basic grammar and punctuation fixes"""
+    # Remove extra spaces
+    text = re.sub(r'\s+', ' ', text)
+    
+    # Capitalize first letter
+    if text:
+        text = text[0].upper() + text[1:]
+    
+    # Capitalize after periods, exclamation marks, question marks
+    text = re.sub(r'([.!?]\s+)([a-z])', lambda m: m.group(1) + m.group(2).upper(), text)
+    
+    # Fix common contractions and capitalize "I"
+    fixes = {
+        r'\bi\b': 'I',
+        r'\bim\b': "I'm",
+        r'\bwont\b': "won't", 
+        r'\bcant\b': "can't",
+        r'\bdont\b': "don't",
+        r'\bisnt\b': "isn't",
+        r'\barent\b': "aren't",
+        r'\bwasnt\b': "wasn't",
+        r'\bwerent\b': "weren't",
+        r'\bthats\b': "that's",
+        r'\bits\b': "it's",
+        r'\byoure\b': "you're",
+        r'\btheyre\b': "they're",
+        r'\bwere\b': "we're",
+    }
+    
+    for pattern, replacement in fixes.items():
+        text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+    
+    # Remove repeated consecutive words
+    text = re.sub(r'\b(\w+)\s+\1\b', r'\1', text)
+    
+    # Add period at end if missing punctuation
+    if text and not text.strip().endswith(('.', '!', '?')):
+        text = text.strip() + '.'
+    
+    return text.strip()
+
 # here, we are loading in the ASCII text and making everything uniformly lowercase.
 
 def generate_seq(model, tokenizer, seq_length, seed_text, n_words):
@@ -48,7 +110,10 @@ def generate_seq(model, tokenizer, seq_length, seed_text, n_words):
 	# truncate sequences to a fixed length
         encoded = pad_sequences([encoded], maxlen=seq_length, truncating='pre')
         # predict probabilities for each word
-        yhat = model.predict_classes(encoded, verbose=0)
+        yhat = model.predict(encoded, verbose=0)
+        
+        # Use temperature sampling instead of greedy sampling
+        yhat = sample_with_temperature(yhat[0], temperature=0.7)
         # map predicted word index to word
         out_word = ''
 
@@ -65,20 +130,26 @@ def generate_seq(model, tokenizer, seq_length, seed_text, n_words):
 # function for loading documents from local files
 
 def load_doc(filename):
-    file = open(filename, 'r')
-    # read all text
-    text = file.read()
-    # close the file
-    file.close()
-    
-    return text
+    try:
+        with open(filename, 'r', encoding='utf-8') as file:
+            text = file.read()
+        return text
+    except UnicodeDecodeError:
+        # Fallback to different encodings if UTF-8 fails
+        try:
+            with open(filename, 'r', encoding='latin1') as file:
+                text = file.read()
+            return text
+        except:
+            with open(filename, 'r', encoding='cp1252', errors='ignore') as file:
+                text = file.read()
+            return text
 
 # save tokens to file, one dialog per line
 def save_doc(lines, filename):
-	data = '\n'.join(lines)
-	file = open(filename, 'w')
-	file.write(data)
-	file.close()
+    data = '\n'.join(lines)
+    with open(filename, 'w', encoding='utf-8') as file:
+        file.write(data)
 
 # we will be cleaning our dataset in order to obtain better word representations.
 

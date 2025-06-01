@@ -1,0 +1,10 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+
+[env]
+PYTHONPATH = "/app:$PYTHONPATH" 

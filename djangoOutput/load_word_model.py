@@ -6,18 +6,25 @@ from pickle import dump
 from random import randint
 from pickle import load
 from numpy import array
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.layers import Dropout
-from keras.layers import LSTM
-from keras.layers import Embedding
-from keras.layers import BatchNormalization
-from keras.models import load_model
-from keras.callbacks import ModelCheckpoint
-from keras.utils import np_utils
-from keras.utils import to_categorical
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
+
+# Updated imports for modern TensorFlow/Keras
+import tensorflow as tf
+from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.layers import Dense, Dropout, LSTM, Embedding, BatchNormalization
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+
+# Updated imports for modern TensorFlow/Keras
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, LSTM, Embedding, BatchNormalization
+from tensorflow.keras.models import load_model
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 
 # sample program to load in a dataset (Trump_2016-11-06.txt)
@@ -43,12 +50,13 @@ def generate_seq(model, tokenizer, seq_length, seed_text, n_words):
     in_text = seed_text
     # generate a fixed number of words
     for _ in range(n_words):
-	# encode the text as integer
+        # encode the text as integer
         encoded = tokenizer.texts_to_sequences([in_text])[0]
-	# truncate sequences to a fixed length
+        # truncate sequences to a fixed length
         encoded = pad_sequences([encoded], maxlen=seq_length, truncating='pre')
-        # predict probabilities for each word
-        yhat = model.predict_classes(encoded, verbose=0)
+        # predict probabilities for each word - UPDATED METHOD
+        yhat = model.predict(encoded, verbose=0)
+        yhat = tf.argmax(yhat, axis=-1).numpy()[0]
         # map predicted word index to word
         out_word = ''
 
@@ -65,20 +73,26 @@ def generate_seq(model, tokenizer, seq_length, seed_text, n_words):
 # function for loading documents from local files
 
 def load_doc(filename):
-    file = open(filename, 'r')
-    # read all text
-    text = file.read()
-    # close the file
-    file.close()
-    
-    return text
+    try:
+        with open(filename, 'r', encoding='utf-8') as file:
+            text = file.read()
+        return text
+    except UnicodeDecodeError:
+        # Fallback to different encodings if UTF-8 fails
+        try:
+            with open(filename, 'r', encoding='latin1') as file:
+                text = file.read()
+            return text
+        except:
+            with open(filename, 'r', encoding='cp1252', errors='ignore') as file:
+                text = file.read()
+            return text
 
 # save tokens to file, one dialog per line
 def save_doc(lines, filename):
-	data = '\n'.join(lines)
-	file = open(filename, 'w')
-	file.write(data)
-	file.close()
+    data = '\n'.join(lines)
+    with open(filename, 'w', encoding='utf-8') as file:
+        file.write(data)
 
 # we will be cleaning our dataset in order to obtain better word representations.
 
