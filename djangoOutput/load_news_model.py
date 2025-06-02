@@ -17,18 +17,25 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
+# TensorFlow compatibility settings
+tf.compat.v1.disable_eager_execution()
 
-
-
-
-
-
-
-
-
-
-
-
+def load_model_with_compatibility(model_path):
+    """Load model with compatibility fixes for older TensorFlow versions"""
+    try:
+        # Try normal loading first
+        model = load_model(model_path)
+        return model
+    except Exception as e:
+        print(f"Normal model loading failed: {str(e)}")
+        try:
+            # Try loading with compile=False to avoid optimizer issues
+            model = load_model(model_path, compile=False)
+            return model
+        except Exception as e2:
+            print(f"Model loading with compile=False failed: {str(e2)}")
+            # Return None to indicate failure
+            return None
 
 # sample program to load in a dataset (Trump_2016-11-06.txt)
 

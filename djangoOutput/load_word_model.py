@@ -16,16 +16,8 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
-# Updated imports for modern TensorFlow/Keras
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, LSTM, Embedding, BatchNormalization
-from tensorflow.keras.models import load_model
-from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-
+# TensorFlow compatibility settings
+tf.compat.v1.disable_eager_execution()
 
 # sample program to load in a dataset (Trump_2016-11-06.txt)
 
@@ -69,6 +61,22 @@ def generate_seq(model, tokenizer, seq_length, seed_text, n_words):
 
     return ' '.join(result)
 
+def load_model_with_compatibility(model_path):
+    """Load model with compatibility fixes for older TensorFlow versions"""
+    try:
+        # Try normal loading first
+        model = load_model(model_path)
+        return model
+    except Exception as e:
+        print(f"Normal model loading failed: {str(e)}")
+        try:
+            # Try loading with compile=False to avoid optimizer issues
+            model = load_model(model_path, compile=False)
+            return model
+        except Exception as e2:
+            print(f"Model loading with compile=False failed: {str(e2)}")
+            # Return None to indicate failure
+            return None
 
 # function for loading documents from local files
 
@@ -98,56 +106,65 @@ def save_doc(lines, filename):
 
 def gen_don(inputtext):
     
-    # define the structure of word sequences we will be training on
-    
-    # organize into sequences of tokens
+    try:
+        # define the structure of word sequences we will be training on
         
-    cleaned_txt = load_doc("Trump_2016-11-06.txt_clean.txt")
-    lines = cleaned_txt.split('\n')
-    
-    # Begin integer encoding
-    
-    tokenizer = Tokenizer()
-    tokenizer.fit_on_texts(lines)
-    sequences = tokenizer.texts_to_sequences(lines)
+        # organize into sequences of tokens
+            
+        cleaned_txt = load_doc("Trump_2016-11-06.txt_clean.txt")
+        lines = cleaned_txt.split('\n')
         
-    # get vocabulary size for bookkeeping
-    vocab_size = len(tokenizer.word_index) + 1
-
-    
-    # separate into input and output arrays: x and y, respectively
-    sequences = array(sequences)
-    X =  sequences[:,:-1]
-    y = sequences[:,-1]
-    y = to_categorical(y, num_classes=vocab_size)
-    seq_length = X.shape[1]
-
-
-    # save the tokenizer
-    dump(tokenizer, open('tokenizer.pkl', 'wb'))
+        # Begin integer encoding
+        
+        tokenizer = Tokenizer()
+        tokenizer.fit_on_texts(lines)
+        sequences = tokenizer.texts_to_sequences(lines)
+            
+        # get vocabulary size for bookkeeping
+        vocab_size = len(tokenizer.word_index) + 1
 
         
-    # load the saved model from file
-    model = load_model('don_model.h5')
-    
+        # separate into input and output arrays: x and y, respectively
+        sequences = array(sequences)
+        X =  sequences[:,:-1]
+        y = sequences[:,-1]
+        y = to_categorical(y, num_classes=vocab_size)
+        seq_length = X.shape[1]
 
-    # load the tokenizer
-    tokenizer = load(open('tokenizer.pkl', 'rb'))
 
-    #load the clean text
-    seq_length = len(lines[0].split()) - 1
+        # save the tokenizer
+        dump(tokenizer, open('tokenizer.pkl', 'wb'))
+
+            
+        # load the saved model from file with compatibility fixes
+        model = load_model_with_compatibility('don_model.h5')
         
-    # select a seed text
-    if (not inputtext):
-        seed_text = lines[randint(0,len(lines))]
-    else:
-        seed_text = inputtext
-    
-    print(seed_text + '\n')
+        if model is None:
+            return "Error: Could not load the model. The model may be incompatible with this version of TensorFlow."
+        
 
-    # generate new text
-    generated = generate_seq(model, tokenizer, seq_length, seed_text, 50)
-    print(generated)
+        # load the tokenizer
+        tokenizer = load(open('tokenizer.pkl', 'rb'))
 
-    return  seed_text + " " + generated
+        #load the clean text
+        seq_length = len(lines[0].split()) - 1
+            
+        # select a seed text
+        if (not inputtext):
+            seed_text = lines[randint(0,len(lines))]
+        else:
+            seed_text = inputtext
+        
+        print(seed_text + '\n')
+
+        # generate new text
+        generated = generate_seq(model, tokenizer, seq_length, seed_text, 50)
+        print(generated)
+
+        return  seed_text + " " + generated
+        
+    except Exception as e:
+        error_msg = f"Error in text generation: {str(e)}"
+        print(error_msg)
+        return error_msg
 
