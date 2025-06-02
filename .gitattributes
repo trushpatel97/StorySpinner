@@ -1,2 +1,7 @@
 *.h5 filter=lfs diff=lfs merge=lfs -text
-*.txt filter=lfs diff=lfs merge=lfs -text
+# Track only large training data text files
+*_clean.txt filter=lfs diff=lfs merge=lfs -text
+tweets*.txt filter=lfs diff=lfs merge=lfs -text
+yelp*.txt filter=lfs diff=lfs merge=lfs -text
+# Exclude requirements.txt from LFS tracking
+requirements.txt -filter -diff -merge text
