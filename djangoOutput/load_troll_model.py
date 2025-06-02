@@ -180,10 +180,29 @@ def gen_tweet(inputtext):
         vocab_size = len(tokenizer.word_index) + 1
 
         
-        # separate into input and output arrays: x and y, respectively
-        sequences = array(sequences, dtype=object)  # Use object dtype for variable length sequences
-        X =  sequences[:,:-1]
-        y = sequences[:,-1]
+        # Filter sequences to same length and convert to arrays properly
+        # Only keep sequences that have at least 2 tokens (for input/output split)
+        filtered_sequences = [seq for seq in sequences if len(seq) >= 2]
+        
+        if not filtered_sequences:
+            return "Error: No valid sequences found in training data."
+        
+        # Find the minimum sequence length to ensure all sequences can be processed
+        min_length = min(len(seq) for seq in filtered_sequences)
+        
+        # Use a reasonable sequence length (cap at 50 to avoid memory issues)
+        target_length = min(min_length, 50)
+        
+        # Truncate all sequences to target length
+        uniform_sequences = [seq[:target_length] for seq in filtered_sequences if len(seq) >= target_length]
+        
+        if not uniform_sequences:
+            return "Error: No sequences of sufficient length found."
+        
+        # Now convert to numpy array safely
+        sequences_array = array(uniform_sequences)
+        X = sequences_array[:,:-1]
+        y = sequences_array[:,-1]
         y = to_categorical(y, num_classes=vocab_size)
         seq_length = X.shape[1]
 
@@ -202,8 +221,8 @@ def gen_tweet(inputtext):
         # load the tokenizer
         tokenizer = load(open('tokenizer.pkl', 'rb'))
 
-        #load the clean text
-        seq_length = len(lines[0].split()) - 1
+        #load the clean text - use uniform sequence length
+        seq_length = len(uniform_sequences[0]) - 1 if uniform_sequences else 10
 
         if (not inputtext):
             
