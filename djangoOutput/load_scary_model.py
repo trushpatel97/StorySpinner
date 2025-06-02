@@ -162,58 +162,67 @@ def save_doc(lines, filename):
 
 def gen_scary_story(inputtext):
     
-    # define the structure of word sequences we will be training on
-    
-    # organize into sequences of tokens
+    try:
+        # define the structure of word sequences we will be training on
         
-    cleaned_txt = load_doc("scary_stories.txt_clean.txt")
-    lines = cleaned_txt.split('\n')
-    
-    # Begin integer encoding
-    
-    tokenizer = Tokenizer()
-    tokenizer.fit_on_texts(lines)
-    sequences = tokenizer.texts_to_sequences(lines)
+        # organize into sequences of tokens
+            
+        cleaned_txt = load_doc("scary_stories.txt_clean.txt")
+        lines = cleaned_txt.split('\n')
         
-    # get vocabulary size for bookkeeping
-    vocab_size = len(tokenizer.word_index) + 1
-
-    
-    # separate into input and output arrays: x and y, respectively
-    sequences = array(sequences)
-    X =  sequences[:,:-1]
-    y = sequences[:,-1]
-    y = to_categorical(y, num_classes=vocab_size)
-    seq_length = X.shape[1]
-
-
-    # save the tokenizer
-    dump(tokenizer, open('tokenizer.pkl', 'wb'))
+        # Begin integer encoding
+        
+        tokenizer = Tokenizer()
+        tokenizer.fit_on_texts(lines)
+        sequences = tokenizer.texts_to_sequences(lines)
+            
+        # get vocabulary size for bookkeeping
+        vocab_size = len(tokenizer.word_index) + 1
 
         
-    # load the saved model from file
-    model = load_model('scary_model.h5')
-    
+        # separate into input and output arrays: x and y, respectively
+        sequences = array(sequences, dtype=object)  # Use object dtype for variable length sequences
+        X =  sequences[:,:-1]
+        y = sequences[:,-1]
+        y = to_categorical(y, num_classes=vocab_size)
+        seq_length = X.shape[1]
 
-    # load the tokenizer
-    tokenizer = load(open('tokenizer.pkl', 'rb'))
 
-    #load the clean text
-    seq_length = len(lines[0].split()) - 1
+        # save the tokenizer
+        dump(tokenizer, open('tokenizer.pkl', 'wb'))
 
-    if (not inputtext):
+            
+        # load the saved model from file with compatibility fixes
+        model = load_model_with_compatibility('scary_model.h5')
         
-        # select a seed text
-        seed_text = lines[randint(0,len(lines))]
+        if model is None:
+            return "Error: Could not load the scary story model. The model may be incompatible with this version of TensorFlow."
+        
 
-    else:
-        seed_text = inputtext
+        # load the tokenizer
+        tokenizer = load(open('tokenizer.pkl', 'rb'))
+
+        #load the clean text
+        seq_length = len(lines[0].split()) - 1
+
+        if (not inputtext):
+            
+            # select a seed text
+            seed_text = lines[randint(0,len(lines))]
+
+        else:
+            seed_text = inputtext
+            
+        print(seed_text + '\n')
+            
+        # generate new text
+        generated = generate_seq(model, tokenizer, seq_length, seed_text, 50)
+        print(generated)
+            
+        return seed_text + " " + generated
         
-    print(seed_text + '\n')
-        
-    # generate new text
-    generated = generate_seq(model, tokenizer, seq_length, seed_text, 50)
-    print(generated)
-        
-    return seed_text + " " + generated
+    except Exception as e:
+        error_msg = f"Error in scary story generation: {str(e)}"
+        print(error_msg)
+        return error_msg
 
