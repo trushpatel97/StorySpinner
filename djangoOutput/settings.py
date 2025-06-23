@@ -20,11 +20,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '8i6m^^fe6*_^mzgwv@y7m8pvjxr)rt^+@+u)id#91_1cu+5u12'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = []
 
 STATICFILES_DIRS = [
@@ -53,11 +52,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'djangoOutput.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [r'/home/corn-nuts/Desktop/WORD2VEC_SPECIAL_FOLDER/project-04-story-spinner/djangoOutput/djangoOutput/templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'djangoOutput', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,7 +67,6 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = 'djangoOutput.wsgi.application'
 
 
@@ -120,15 +117,5 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-'''
-# For the AWS Deployment 
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-
-AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = None
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-'''

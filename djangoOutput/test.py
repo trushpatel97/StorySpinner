@@ -1,6 +1,2 @@
-def hello():
-    print("DAFHADAJSDAS")
-    str = "HELLO WORLD!"
-    return str
-
-hello()
+from django.core.management.utils import get_random_secret_key
+print(get_random_secret_key())
