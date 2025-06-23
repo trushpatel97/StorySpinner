@@ -24,7 +24,9 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'storyspinner-38sx.onrender.com',
+]
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
