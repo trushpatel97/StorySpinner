@@ -13,17 +13,27 @@ from djangoOutput.load_caesar_model import gen_caesar, load_doc, save_doc, gener
 
 import sys
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 def button(request):
+    logger.debug("Entering button view")
     print("RUNNING BUTTON")
+    logger.debug("Exiting button view")
     return render(request,'index.html')
+
 def output(request):
+    logger.debug("Entering output view")
     print("RUNNING OUTPUT")
     data=requests.get("https://regres.in/api/users")
     print(data.text)
     data=data.text
+    logger.debug("Exiting output view")
     return render(request,'index.html',{'data':data})
+
 def external(request):
+    logger.debug("Entering external view")
     print('Running external')
     #out=run([sys.executable,'/home/corn-nuts/Desktop/WORD2VEC_SPECIAL_FOLDER/project-04-story-spinner/djangoOutput/djangoOutput/load_word_model.py'],shell=False,stdout=PIPE)
     #print(os.getcwd())
@@ -53,4 +63,6 @@ def external(request):
             response = gen_tweet(params)
         elif (request.POST.get("Caesar_Button")):
             response = gen_caesar(params)
+        logger.debug("Successfully processed external view")
         return render(request,'index.html',{'data1':response})
+    logger.debug("Exiting external view")

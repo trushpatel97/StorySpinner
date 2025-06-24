@@ -14,10 +14,20 @@ from keras.layers import Embedding
 from keras.layers import BatchNormalization
 from keras.models import load_model
 from keras.callbacks import ModelCheckpoint
-from keras.utils import np_utils
-from keras.utils import to_categorical
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
+import logging
+
+logger = logging.getLogger(__name__)
+
+logger.debug("Starting load_word_model module")
+
+try:
+    from tensorflow.keras.utils import to_categorical
+    logger.debug("Successfully imported to_categorical from tensorflow.keras.utils")
+except ImportError as e:
+    logger.error(f"Error importing to_categorical: {e}")
+    raise
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 
 # sample program to load in a dataset (Trump_2016-11-06.txt)
@@ -83,7 +93,7 @@ def save_doc(lines, filename):
 # we will be cleaning our dataset in order to obtain better word representations.
 
 def gen_don(inputtext):
-    
+    logger.debug("Entering gen_don function")
     # define the structure of word sequences we will be training on
     
     # organize into sequences of tokens
@@ -134,6 +144,9 @@ def gen_don(inputtext):
     # generate new text
     generated = generate_seq(model, tokenizer, seq_length, seed_text, 50)
     print(generated)
+
+    logger.debug("Successfully executed gen_don")
+    logger.debug("Exiting gen_don function")
 
     return  seed_text + " " + generated
 
