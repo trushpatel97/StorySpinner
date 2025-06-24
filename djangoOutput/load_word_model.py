@@ -29,6 +29,14 @@ except ImportError as e:
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+import tensorflow as tf
+import numexpr
+numexpr.set_num_threads(2)
+tf.config.threading.set_intra_op_parallelism_threads(2)
+tf.config.threading.set_inter_op_parallelism_threads(2)
+
 
 # sample program to load in a dataset (Trump_2016-11-06.txt)
 
